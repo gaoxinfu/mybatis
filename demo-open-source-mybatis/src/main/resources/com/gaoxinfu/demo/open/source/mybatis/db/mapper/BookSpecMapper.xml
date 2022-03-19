@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+       Copyright 2009-2020 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Sql映射  | namespce:唯一标识当前此映射文件 -->
+<mapper namespace="com.gaoxinfu.demo.open.source.mybatis.db.mapper.BookSpecMapper">
+
+  <!-- 将JAVA实体类中的属性和表中的字段进行对应
+   column:数据库中的列
+   property:对应的实体类中的属性
+  -->
+  <resultMap type="com.gaoxinfu.demo.open.source.mybatis.db.model.Book" id="BookResultMap">
+    <id column="id" property="id"/>
+    <result column="name" property="bookName"/>
+    <result column="price" property="bookPrice"/>
+  </resultMap>
+
+  <!-- resultMap：resultMap的id ，bookName：resultMap的property，即实体类中的属性 -->
+  <parameterMap type="com.gaoxinfu.demo.open.source.mybatis.db.model.Book" id="BookParameterMap">
+    <parameter property="bookName" resultMap="BookResultMap" />
+    <parameter property="bookPrice" resultMap="BookResultMap" />
+  </parameterMap>
+
+  <select id="selectAll" resultMap="BookResultMap">
+  select * from BOOK_MANAGE
+ </select>
+
+  <!-- 根据ID查询Book -->
+  <select id="selectBookById" parameterType="int" resultMap="BookResultMap">
+  select * from BOOK_MANAGE
+   where
+  id=#{id}
+ </select>
+
+  <!-- 根据ID删除Book -->
+  <delete id="deleteBookById" parameterType="com.gaoxinfu.demo.open.source.mybatis.db.model.Book">
+  delete from BOOK_MANAGE where id=#{id}
+ </delete>
+
+  <!-- 保存一个Book -->
+  <insert id="saveBook" parameterMap="BookParameterMap">
+  insert into BOOK_MANAGE
+   (ID,NAME,PRICE)
+    values
+   (ID,#{bookName},#{bookPrice})
+ </insert>
+
+  <!-- 根据ID修改Book -->
+  <update id="updatePersnById" parameterMap="BookParameterMap">
+  update BOOK_MANAGE
+   set
+    NAME=#{bookName},
+    PRICE=#{bookPrice}
+   WHERE id=#{id}
+ </update>
+</mapper>
